@@ -1,0 +1,84 @@
+// infix to postfix
+#include <stdio.h>
+#include <stdlib.h>
+#include <ctype.h>
+
+#define SIZE 10
+
+char infix[SIZE];
+char postfix[SIZE];
+char stack[SIZE];
+int top = -1;
+int ch;
+int i=0;
+int k=0;
+
+void push(char ch)
+{
+   ++top;
+    stack[top]=ch;
+}
+
+char pop()
+{
+    return stack[top--];
+}
+
+int pr(char ch)
+{
+   if (ch =='^')  return 4;
+    if(ch =='*' || ch=='/') return 3;
+    if(ch =='+' || ch=='-') return 2;
+    else return 0;
+    
+}
+int main() 
+{
+   
+    printf("Enter the prefix \n");
+    scanf("%s", infix);
+    push('#');
+    while((ch=infix[i]) != '\0')
+    {
+        ++i;
+        if(ch == '(')
+        {
+            push(ch);
+        }
+        else
+        {
+            if(isalnum(ch))
+            {
+                postfix[k]=ch;
+                ++k;
+            }
+            else if(ch == ')')
+            {
+                while(stack[top] != '(')
+                {
+                    postfix[k]=pop();
+                    ++k;
+                }
+                int ele=pop();
+            }
+            else
+            {
+                while(pr(stack[top])>=pr(ch))
+                {
+                    postfix[k]=pop();
+                    ++k;
+                }
+                push(ch);
+            }
+        }
+        
+    }
+    while(stack[top]!= '#')
+    {
+        postfix[k]=pop();
+        ++k;
+    }
+    postfix[k]='\0';
+    printf("%s",postfix);
+    return 0;
+}
