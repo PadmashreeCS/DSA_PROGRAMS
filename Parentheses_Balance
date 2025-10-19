@@ -53,7 +53,7 @@ int main()
             if (!isMatchingPair(open, ch))
             {
                 printf("Not Balanced\n");
-                return 0;
+                return 0; // to exit from main method, no need to check other again
             }
         }
     }
