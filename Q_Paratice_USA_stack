@@ -1,0 +1,120 @@
+// separate the usn by the even or odd
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+
+#define MAX_SIZE 50
+
+int even_stack[MAX_SIZE];
+int odd_stack[MAX_SIZE];
+
+int even_top = -1;
+int odd_top = -1;
+
+void push_even(int value);
+void push_odd(int value);
+void process_usns(int num_usns);
+void display_even_usns();
+void display_odd_usns();
+
+void push_even(int value) {
+    if (even_top == MAX_SIZE - 1) {
+        printf("Error: Even stack is full. Cannot push %d.\n", value);
+        return;
+    }
+    even_top++;
+    even_stack[even_top] = value;
+}
+
+void push_odd(int value) {
+    if (odd_top == MAX_SIZE - 1) {
+        printf("Error: Odd stack is full. Cannot push %d.\n", value);
+        return;
+    }
+    odd_top++;
+    odd_stack[odd_top] = value;
+}
+
+void display_even_usns() {
+    printf("\n--- Even USNs (Top to Bottom) ---\n");
+    if (even_top == -1) {
+        printf("No USNs found in the Even category.\n");
+        return;
+    }
+    
+    // Print elements from top to bottom (LIFO order)
+    for (int i = even_top; i >= 0; i--) {
+        printf("%d\n", even_stack[i]);
+    }
+    printf("--------------------------------------\n");
+}
+
+void display_odd_usns() {
+    printf("\n--- 🔣 Odd USNs (Top to Bottom) ---\n");
+    if (odd_top == -1) {
+        printf("No USNs found in the Odd category.\n");
+        return;
+    }
+    
+    // Print elements from top to bottom (LIFO order)
+    for (int i = odd_top; i >= 0; i--) {
+        printf("%d\n", odd_stack[i]);
+    }
+    printf("--------------------------------------\n");
+}
+
+// --- 3. Main Logic to Read and Separate USNs ---
+
+void process_usns(int num_usns) {
+    int usn;
+    
+    printf("\n--- Enter %d USNs ---\n", num_usns);
+    for (int i = 0; i < num_usns; i++) {
+        printf("Enter USN %d: ", i + 1);
+
+
+        
+        // if you need write 
+        if (scanf("%d", &usn) != 1) {
+            printf("Invalid input. Please enter a valid number.\n");
+            while(getchar() != '\n'); // Clear input buffer
+            i--; // Decrement i to re-read the current USN
+            continue;
+        }
+
+        //
+
+
+
+        if (usn % 2 == 0) {
+            printf("-> USN %d is **Even**.\n", usn);
+            push_even(usn);
+        } else {
+            printf("-> USN %d is **Odd**.\n", usn);
+            push_odd(usn);
+        }
+    }
+}
+
+
+int main() {
+    int total_usns;
+    
+    printf("Welcome to the USN Seating Separator (Array-Only Stack).\n");
+    
+    printf("Enter the total number of USNs to process (Max %d): ", MAX_SIZE);
+    scanf("%d", &total_usns);
+    if (total_usns <= 0 || total_usns > MAX_SIZE) {
+        printf("Invalid number of USNs. Exiting.\n");
+        return 1;
+    }
+
+    process_usns(total_usns);
+
+    printf("\n\n=============== Separation Results ==============\n");
+    display_even_usns();
+    display_odd_usns();
+    printf("=================================================\n");
+
+    return 0;
+}
