@@ -1,0 +1,105 @@
+// CIRCULAR QUEUE MODIFIED FOR HACKATHON SEATING
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+
+#define SIZE 40
+
+int front = -1;
+int rear = -1;
+int choice;
+int queue[SIZE]; 
+int next_participant_id = 1001; 
+
+
+int isfull() {
+    return (((rear + 1) % SIZE == front) || (front == 0 && rear == SIZE-1));
+}
+
+int isempty() {
+    return (front == -1);
+}
+
+void register_participant() {
+    if (isfull()) {
+        printf("\n🛑 **Registrations Closed for the Hackathon**\n");
+    } else {
+        int id = next_participant_id++; 
+
+        if (front == -1) {
+            front = 0;
+        }
+
+        rear = (rear + 1) % SIZE;
+        queue[rear] = id;
+        printf("✅ Participant %d arrived and seated at index %d. \n", id, rear);
+    }
+}
+
+void leave_participant() {
+    if (isempty()) {
+        printf("⚠️ Lab is Empty. No participants to leave.\n");
+    } else {
+        int leaving_id = queue[front]; 
+
+        if (front == rear) {
+            front = -1;
+            rear = -1;
+        } else {
+            front = (front + 1) % SIZE;
+        }
+
+        printf("Participant **%d** has left the lab (Seat vacated). \n", leaving_id);
+    }
+}
+
+void display_seating() {
+    if (isempty()) {
+        printf("Lab seats are currently empty.\n");
+    } else {
+        printf("\n--- Current Seating Order (First to Leave to Last to Leave) ---\n");
+        int i = front;
+        int count = 1;
+        
+        while (1) {
+            printf("%d. Seat [%d]: Participant %d\n", count, i, queue[i]);
+            if (i == rear) break;
+            i = (i + 1) % SIZE;
+            count++;
+        }
+        printf("----------------------------------------------------------------\n");
+    }
+}
+
+int main() {
+    
+    printf("--- BMSCE Hackathon Seating Application (Capacity: %d) ---\n", SIZE);
+
+    while (1) {
+        printf("\n1. Participant Arrival (Register)\n");
+        printf("2. Participant Leaving (Vacate Seat)\n");
+        printf("3. Display Seating Order\n");
+        printf("4. Exit Application\n");
+        printf("Enter your choice: ");
+
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1: 
+                register_participant(); 
+                break;
+            case 2: 
+                leave_participant(); 
+                break;
+            case 3: 
+                display_seating(); 
+                break;
+            case 4: 
+                exit(0);
+            default: 
+                printf("Invalid choice\n");
+        }
+    }
+
+    return 0;
+}
