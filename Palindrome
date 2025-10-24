@@ -2,7 +2,7 @@
 #include <string.h>
 #define SIZE 100
 
-char input[SIZE];      // To store the original string
+char input[SIZE];      // To store the original string   char input[6] = {'M', 'a', 'd', 'a', 'm', '\0'};
 char stack[SIZE];      // Stack to reverse the string
 char re_str[SIZE];     // To store the reversed string
 int top = -1;
