@@ -1,0 +1,120 @@
+// CHOCOLATE INVENTORY MANAGEMENT SYSTEM (STACK IMPLEMENTATION)
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h> // taking postive number randomly
+
+#define SIZE 10
+int stack[SIZE];
+int top = -1;
+
+void push()
+{
+    if(top == SIZE-1)
+    {
+        printf("Inventory Full for the Day \n");
+    }
+    else
+    {
+        int chocolates = (rand() % 41) + 10; // *or* print("Enter the postive: "); scanf("%d",&value); if(value % 2 ==0 ) push; else print("Not valid");
+        top++;
+        stack[top] = chocolates;
+        
+        printf("Receive Operation: New box added with %d chocolates. \n", stack[top]);
+    }
+}
+
+void pop()
+{
+    if(top == -1)
+    {
+        printf(" No chocolates available \n");
+    }
+    else
+    {
+        printf("Sell Operation: Box sold containing %d chocolates. \n", stack[top]);
+        top--;
+    }
+}
+
+void display()
+{
+     if(top == -1)
+    {
+        printf("Inventory is empty \n");
+    }
+    else
+    {
+        printf("Current Inventory (Top to Bottom):\n");
+        for(int i = top; i >= 0; i--)
+        {
+            printf("Box %d: %d chocolates\n", i + 1, stack[i]);
+        }
+    }
+}
+
+void isFull()
+{
+    if(top == SIZE-1)
+    {
+        printf("True (Inventory is Full) \n");
+    }
+    else
+    {
+        printf("False (Inventory has space) \n");
+    }
+}
+
+void isEmpty()
+{
+    if(top == -1)
+    {
+        printf("True (Inventory is Empty) \n");
+    }
+    else
+    {
+        printf("False (Inventory is not Empty) \n");
+    } 
+}
+
+int main() 
+{
+    int choice;
+    // Seed the random number generator
+    srand(time(NULL)); 
+
+    printf("--- Chocolate Inventory Management System ---\n");
+    printf("Max Capacity: %d boxes\n", SIZE);
+
+    while(1)
+    {
+        printf("\n------------------------------------------------------\n");
+        printf("1. Receive Box (Push) 2.Sell Box (Pop) 3.Display 4.Exit 5.Is Full 6. Is Empty\n");
+        printf("Enter option: ");
+        
+        // Basic input handling
+        if (scanf("%d", &choice) != 1) {
+             printf("Invalid input. Please enter a number.\n");
+             while(getchar() != '\n'); // Clear the input buffer
+             continue; 
+        }
+        
+        switch(choice)
+        {
+            case 1: push();
+            break;
+            case 2: pop();
+            break;
+            case 3: display();
+            break;
+            case 4: exit(0);
+            break;
+            case 5: isFull();
+            break;
+            case 6: isEmpty();
+            break;
+            default: printf("Invalid choice\n");
+        }
+    }
+
+    return 0;
+}
