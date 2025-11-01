@@ -101,7 +101,15 @@ void insertionAtAnyPosition()
     int Pos, i = 1;
     printf("Enter the position after:");
     scanf("%d", &Pos);
-    
+    if (Pos == 0) 
+    {
+        newnode = (struct struct *) malloc (sizeof(struct node));
+        printf("Enter data:");
+        scanf("%d", &newnode->data);
+        newnode->next = head;
+        head = newnode;
+        return; 
+    }
     if (Pos > count) 
     {
         printf("Invalid Position.");
