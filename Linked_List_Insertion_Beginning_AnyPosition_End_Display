@@ -112,7 +112,7 @@ void insertionAtAnyPosition()
         printf("Enter data:");
         scanf("%d", &newnode->data);
         temp = head;
-        while(i < Pos - 1) 
+        while(i < Pos ) // i < pos-1 
         {
             temp = temp->next;
             i++;
