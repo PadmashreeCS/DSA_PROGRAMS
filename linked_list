@@ -1,0 +1,88 @@
+#include <stdio.h>
+#include <stdlib.h> // For malloc
+#include <conio.h>  // For getch
+
+// 1. Define the structure for a node
+struct node {
+    int data;           // Data field to store the value
+    struct node *next;  // Pointer to the next node in the list
+};
+
+// Global pointers to be accessible by all functions
+struct node *head = NULL;
+struct node *temp = NULL; // 'temp' is used globally in the insertion logic
+
+// Function Prototypes
+void insertAtLast();
+void display();
+
+// Function to insert a new node at the end of the list
+void insertAtLast() {
+    struct node *newnode;
+    int choice = 1;
+
+    while (choice != 0) {
+        // a. Dynamically allocate memory for a new node
+        newnode = (struct node *)malloc(sizeof(struct node));
+
+        if (newnode == NULL) {
+            printf("Memory allocation failed!\n");
+            return;
+        }
+        
+        // b. Get data from the user
+        printf("Enter data: ");
+        scanf("%d", &newnode->data);
+        
+        // c. Set the next pointer of the new node to NULL (it's the last node for now)
+        newnode->next = NULL;
+        
+        // d. Check if the list is empty (insertion at the beginning)
+        if (head == NULL) {
+            head = newnode;
+            temp = newnode; // 'temp' points to the last node
+        } else { // e. If the list is not empty (insertion at the end)
+            temp->next = newnode; // Link the current last node (pointed to by temp) to the new node
+            temp = newnode;       // Update 'temp' to point to the new last node
+        }
+        
+        // f. Ask the user if they want to continue
+        printf("Do you want to continue (1 for Yes, 0 for No)? ");
+        scanf("%d", &choice);
+    }
+}
+
+// Function to traverse and display the elements of the list
+void display() {
+    struct node *current = head; // Use a local pointer for traversal
+    
+    printf("\n--- Traversal and Printing ---\n");
+    
+    // Loop until 'current' is NULL (end of the list)
+    if (current == NULL) {
+        printf("The list is empty.\n");
+    } else {
+        while (current != NULL) {
+            printf("%d ", current->data); // Print the data of the current node
+            current = current->next;     // Move to the next node
+        }
+    }
+    
+    printf("\n------------------------------\n");
+}
+
+
+int main() {
+    printf("Starting linked list creation...\n");
+    
+    // Call the function to insert nodes at the end
+    insertAtLast();
+    
+    // Call the function to display the list
+    display();
+    
+    printf("Press any key to exit...");
+    getch(); 
+
+    return 0;
+}
