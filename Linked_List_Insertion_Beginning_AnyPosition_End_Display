@@ -1,0 +1,164 @@
+#include <stdio.h>
+#include <stdlib.h> 
+
+struct node 
+{
+    int data;            
+    struct node *next;  
+};
+
+struct node *head = NULL;
+ struct node *newnode;
+ struct node *temp;
+
+void insertAtBeginning();
+void insertAtEnd();
+void display();
+
+void insertAtBeginning() 
+{
+    newnode = (struct node *)malloc(sizeof(struct node));
+    if (newnode == NULL)
+    {
+        printf("Memory allocation failed!\n");
+        return;
+    }
+
+    printf("\n--- Insert at Beginning ---\n");
+    printf("Enter data to insert: ");
+    scanf("%d", &newnode->data);
+
+    newnode->next = head;
+    head = newnode;
+
+    printf("Node with data %d inserted at the beginning.\n", newnode->data);
+}
+
+
+void insertAtEnd()
+{
+    newnode = (struct node *)malloc(sizeof(struct node));
+    if (newnode == NULL) 
+    {
+        printf("Memory allocation failed!\n");
+        return;
+    }
+
+    printf("\n--- Insert at End ---\n");
+    printf("Enter data to insert: "); 
+    scanf("%d", &newnode->data);
+    newnode->next = NULL;
+
+    if (head == NULL) 
+    {
+        head = newnode;
+    } 
+    else 
+    {
+        temp = head;
+        while (temp->next != NULL)
+        {
+            temp = temp->next;
+        }
+        temp->next = newnode;
+    }
+
+    printf("Node with data %d inserted at the end.\n", newnode->data);
+}
+
+
+void display() 
+{
+    temp = head; 
+    printf("\n--- Current Linked List ---\n");
+
+    if (temp == NULL) 
+    {
+        printf("The list is empty. NULL\n");
+    } 
+    else 
+    {
+        while (temp != NULL) 
+        {
+            printf("%d -> ", temp->data);  
+            temp = temp->next;            
+        }
+        printf("NULL\n");
+    }
+
+    printf("---------------------------\n");
+}
+
+void insertionAtAnyPosition()
+{   
+    int count = 0;
+    temp = head;
+    while(temp != NULL)
+    {
+        temp = temp->next;
+        count++;
+    }
+    int Pos, i = 1;
+    printf("Enter the position after:");
+    scanf("%d", &Pos);
+    
+    if (Pos > count) 
+    {
+        printf("Invalid Position.");
+    }
+    else 
+    {
+        newnode = (struct node *) malloc (sizeof(struct node));
+        printf("Enter data:");
+        scanf("%d", &newnode->data);
+        temp = head;
+        while(i < Pos - 1) 
+        {
+            temp = temp->next;
+            i++;
+        }
+        
+        newnode->next = temp->next; 
+        temp->next = newnode;       
+    }
+}
+
+int main() 
+{
+    int choice;
+
+    while (1) 
+    {
+        printf("\n\n--- Single Insertion Menu ---\n");
+        printf("1. Insert a single node at **Beginning**\n");
+        printf("2. Insert a single node at **End**\n");
+        printf("3. Insert At any Position in List\n");
+        printf("4. Display List\n");
+        printf("0. Exit Program\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) 
+        {
+            case 1:
+                insertAtBeginning();
+                break;
+            case 2:
+                insertAtEnd();
+                break;
+            case 3:
+                 insertionAtAnyPosition();
+                 break;
+            case 4:
+                display();
+                break;
+            case 0: // Exit case
+                printf("Exiting program. Goodbye!\n");
+                exit(0); 
+            default:
+                printf("Invalid choice. Please enter a number from the menu (0-3).\n");
+        }
+    }
+    return 0; 
+}
+
