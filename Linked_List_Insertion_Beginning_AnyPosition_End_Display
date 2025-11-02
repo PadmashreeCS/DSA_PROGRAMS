@@ -10,10 +10,112 @@ struct node
 struct node *head = NULL;
  struct node *newnode;
  struct node *temp;
+struct node *temp_del;
+struct node *prevnode;
 
 void insertAtBeginning();
 void insertAtEnd();
+void deleteFromBeg(); 
+void deleteFromEnd();
 void display();
+void insertionAtAnyPosition();
+void deleteFromPosition();
+
+void deleteFromPosition()
+{
+    int Pos, i = 1;
+
+    printf("\n--- Delete from Specified Position 🗑️ ---\n");
+
+    if (head == NULL)
+    {
+        printf("List is empty. Cannot delete.\n");
+        return;
+    }
+
+    printf("Enter the position of the node to delete (1-based index): ");
+    scanf("%d", &Pos);
+
+    if (Pos < 1)
+    {
+        printf("Invalid position. Position must be 1 or greater.\n");
+        return;
+    }
+
+    if (Pos == 1)
+    {
+        deleteFromBeg(); 
+        return;
+    }
+
+    prevnode = head;
+
+    while (i < Pos - 1)
+    {
+        prevnode = prevnode->next;
+        i++;
+    }
+
+    if (prevnode == NULL || prevnode->next == NULL)
+    {
+        printf("Invalid position or position out of bounds.\n");
+        return;
+    }
+    
+    temp_del = prevnode->next; 
+    prevnode->next = temp_del->next; 
+    printf("Node with data %d deleted from position %d.\n", temp_del->data, Pos);
+    free(temp_del); 
+}
+
+void deleteFromEnd()
+{
+    printf("\n--- Delete from End 🗑️ ---\n");
+    if (head == NULL) 
+    {
+        printf("List is empty. Cannot delete.\n");
+        return;
+    }
+
+    temp_del = head; 
+    prevnode = NULL; 
+    while (temp_del->next != NULL) 
+    {
+        prevnode = temp_del; 
+        temp_del = temp_del->next;
+    }
+
+    if (head->next == NULL) 
+    {
+        printf("Node with data %d deleted from the end.\n", head->data);
+        free(head);
+        head = NULL;
+        return;
+    }
+    else
+    {
+        prevnode->next = NULL; 
+        printf("Node with data %d deleted from the end.\n", temp_del->data);
+        free(temp_del); 
+    }
+}
+
+void deleteFromBeg()
+{
+    printf("\n--- Delete from Beginning ---\n");
+    if (head == NULL) 
+    {
+        printf("List is empty. Cannot delete.\n");
+        return;
+    }
+    else
+    {
+        temp_del = head; 
+        head = head->next;       // for this we can use even "temp_del->next   
+        printf("Node with data %d deleted from the beginning.\n", temp_del->data);
+        free(temp_del);             
+   }
+}
 
 void insertAtBeginning() 
 {
@@ -141,7 +243,9 @@ int main()
         printf("1. Insert a single node at **Beginning**\n");
         printf("2. Insert a single node at **End**\n");
         printf("3. Insert At any Position in List\n");
-        printf("4. Display List\n");
+        printf("4. **Delete** a single node at **Beginning**\n");
+        printf("5. **Delete** node at **End**\n");
+        printf("6. Display List\n");
         printf("0. Exit Program\n");
         printf("Enter your choice: ");
         scanf("%d", &choice);
@@ -158,6 +262,12 @@ int main()
                  insertionAtAnyPosition();
                  break;
             case 4:
+                deleteFromBeg();
+                break;
+            case 5:
+                deleteFromEnd();
+                break;
+            case 6:
                 display();
                 break;
             case 0: // Exit case
