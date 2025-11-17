@@ -1,0 +1,87 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct node
+{
+    int data;
+    struct node *next;
+};
+
+struct node *head = NULL;
+
+// Insert at end
+void insertAtEnd()
+{
+    struct node *newnode = (struct node*)malloc(sizeof(struct node));
+    printf("Enter data: ");
+    scanf("%d", &newnode->data);
+    newnode->next = NULL;
+
+    if (head == NULL)
+        head = newnode;
+    else
+    {
+        struct node *temp = head;
+        while (temp->next != NULL)
+            temp = temp->next;
+        temp->next = newnode;
+    }
+}
+
+// Display
+void display()
+{
+    struct node *temp = head;
+    while (temp != NULL)
+    {
+        printf("%d ", temp->data);
+        temp = temp->next;
+    }
+    printf("\n");
+}
+
+// Reverse using EXACT same whiteboard logic
+void reverse()
+{
+    struct node *prevnode, *currentnode, *nextnode;
+
+    prevnode = 0;  
+    currentnode = nextnode = head;
+
+    while (nextnode != 0)
+    {
+        // Move nextnode to next block
+        nextnode = nextnode->next;
+
+        // Reverse pointer
+        currentnode->next = prevnode;
+
+        // Move prevnode to currentnode
+        prevnode = currentnode;
+
+        // Move currentnode to nextnode
+        currentnode = nextnode;
+    }
+
+    head = prevnode;
+}
+
+int main()
+{
+    int n;
+    printf("How many nodes? ");
+    scanf("%d", &n);
+
+    for (int i = 0; i < n; i++)
+        insertAtEnd();
+
+    printf("Original list: ");
+    display();
+
+    reverse();
+
+    printf("Reversed list: ");
+    display();
+
+    return 0;
+}
