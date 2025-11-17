@@ -1,0 +1,93 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct node 
+{
+    int data;
+    struct node *next;
+};
+ struct node *head = NULL;
+ struct node *newnode;
+  struct node *temp;
+void  search()
+{
+    struct node* temp = head;
+    int position = 1;   // To return position
+    int result = 0;
+    if(head == NULL)
+    {
+        printf("Node is Empty");
+    }
+    else
+    {
+        printf("Enter the key to search: ");
+        int key;
+        scanf("%d",&key);
+        while (temp != NULL) 
+        {
+            if (temp->data == key)
+            {
+                result = 1;
+                break;
+            }
+            temp = temp->next;
+            position++;
+        }
+    }
+    if(result)
+    {
+        printf("Found at position %d",position);
+    }
+    else
+    {
+        printf("Not found");
+    }
+    
+
+}
+
+void insertAtEnd()
+{
+    newnode = (struct node *)malloc(sizeof(struct node));
+    if (newnode == NULL) 
+    {
+        printf("Memory allocation failed!\n");
+        return;
+    }
+
+    printf("\n--- Insert at End ---\n");
+    printf("Enter data to insert: "); 
+    scanf("%d", &newnode->data);
+    newnode->next = NULL;
+
+    if (head == NULL) 
+    {
+        head = newnode;
+    } 
+    else 
+    {
+        temp = head;
+        while (temp->next != NULL)
+        {
+            temp = temp->next;
+        }
+        temp->next = newnode;
+    }
+
+    printf("Node with data %d inserted at the end.\n", newnode->data);
+}
+
+int main() 
+{
+    printf("How many data need to insert: ");
+    int n;
+    scanf("%d",&n);
+    for(int i=0;i<n;i++)
+    {
+         insertAtEnd();
+    }
+
+    search();
+
+    return 0;
+}
