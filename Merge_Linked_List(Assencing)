@@ -1,0 +1,128 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct node
+{
+    int data;
+    struct node *next;
+};
+
+struct node *newnode=NULL;
+struct node *temp=NULL;
+struct node* new_head = NULL; //Point to head of new node
+struct node* sorting = NULL; //act like temp for traversing
+
+void insertAtEnd(struct node **head) 
+{
+    newnode = (struct node *)malloc(sizeof(struct node));
+    if (newnode == NULL) 
+    {
+        printf("Memory allocation failed!\n");
+        return;
+    }
+
+    printf("Enter data: ");
+    scanf("%d", &newnode->data);
+    newnode->next = NULL;
+
+    // If list is empty
+    if (*head == NULL) 
+    {
+        *head = newnode;        // Directly update global head
+    } 
+    else 
+    {
+        temp = *head;
+        while (temp->next != NULL)
+        {
+            temp = temp->next;
+        }
+        temp->next = newnode;
+    }
+}
+
+// Display list
+void display(struct node* head)
+{
+    struct node* temp = head;
+    while (temp != NULL)
+    {
+        printf("%d ", temp->data);
+        temp = temp->next;
+    }
+    printf("\n");
+}
+
+struct node* merge(struct node* p, struct node* q)
+{
+    if (p == NULL) return q;
+    if (q == NULL) return p;
+
+    // Select first node
+    if (p->data <= q->data)  // setting pointer p, q and new_head to other node for given condition (inizial stage)
+    {
+        new_head = sorting = p;
+        p = p->next;
+    }
+    else
+    {
+        new_head = sorting = q;
+        q = q->next;
+    }
+
+    while (p != NULL && q != NULL) // use to merge according to accessing 
+    {
+        if (p->data <= q->data)
+        {
+            sorting->next = p;
+            sorting = p;
+            p = p->next;
+        }
+        else
+        {
+            sorting->next = q;
+            sorting = q;
+            q = q->next;
+        }
+    }
+
+    // Attach remaining nodes
+    if (p == NULL)
+        sorting->next = q;
+    else
+        sorting->next = p;
+
+    return new_head;
+}
+
+int main()
+{
+    struct node *head1 = NULL, *head2 = NULL, *merged = NULL;
+
+    printf("\n--- Insert elements in List 1 ---\n");
+    printf("How many nodes in List 1? ");
+    int n;
+    scanf("%d", &n);
+    for(int i = 0; i < n; i++)
+        insertAtEnd(&head1); 
+
+    printf("\n--- Insert elements in List 2 ---\n");
+    printf("How many nodes in List 2? ");
+    scanf("%d", &n);
+    for(int i = 0; i < n; i++)
+        insertAtEnd(&head2);
+
+    printf("List 1: ");
+    display(head1);
+
+    printf("List 2: ");
+    display(head2);
+
+    // Merge lists
+    merged = merge(head1, head2);
+
+    printf("Merged List: ");
+    display(merged);
+
+    return 0;
+}
