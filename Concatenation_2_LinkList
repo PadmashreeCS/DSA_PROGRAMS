@@ -7,82 +7,99 @@ struct node
     struct node *next;
 };
 
-struct node* createNode(int value) {
-    struct node* newNode = (struct node*)malloc(sizeof(struct node));
-    newNode->data = value;
-    newNode->next = NULL;
-    return newNode;
-}
+struct node *head1 = NULL, *head2 = NULL;
+struct node *temp, *newnode;
 
-// Insert at end
-struct node* insertEnd(struct node* head, int value) 
+// Insert at end (uses global head)
+void insertAtEnd(struct node **head) 
 {
-    struct node* newNode;
-    newNode = (struct node*)malloc(sizeof(struct node));
-    newNode->data = value;
-    newNode->next = NULL;
-    
-
-    if (head == NULL) 
+    newnode = (struct node *)malloc(sizeof(struct node));
+    if (newnode == NULL) 
     {
-        return newNode;  // we are assigning head=NULL in main if we say head = newnode, it will not get modify in other funcation. 
-                        // his only changes the local copy of head. The global head1 does NOT change.
+        printf("Memory allocation failed!\n");
+        return;
     }
 
-    struct node* temp = head;
-    while (temp->next != NULL) 
-    {
-        temp = temp->next;
-    }
-    temp->next = newNode;
+    printf("Enter data: ");
+    scanf("%d", &newnode->data);
+    newnode->next = NULL;
 
-    return head;
+    // If list is empty
+    if (*head == NULL) 
+    {
+        *head = newnode;        // Directly update global head
+    } 
+    else 
+    {
+        temp = *head;
+        while (temp->next != NULL)
+        {
+            temp = temp->next;
+        }
+        temp->next = newnode;
+    }
 }
 
-// Concatenate
-struct node* concatenate(struct node* head1, struct node* head2) {
-    if (head1 == NULL) return head2;
-    if (head2 == NULL) return head1;
+// Concatenate (using global heads)
+void concatenate()
+{
+    if (head1 == NULL)
+    {
+        head1 = head2;
+        return;
+    }
+    if (head2 == NULL)
+    {
+        return;
+    }
 
-    struct node* temp = head1;
-    while (temp->next != NULL) {
+    temp = head1;
+    while (temp->next != NULL)
+    {
         temp = temp->next;
     }
     temp->next = head2;
 
-    return head1;
+    printf("\nLists concatenated successfully!\n");
 }
 
-void display(struct node* head) {
-    struct node* temp = head;
-    while (temp != NULL) {
+void display(struct node *head) 
+{
+    temp = head;
+    while (temp != NULL)
+    {
         printf("%d ", temp->data);
         temp = temp->next;
     }
     printf("\n");
 }
 
-int main() 
+int main()
 {
-    struct node *head1 = NULL, *head2 = NULL;
+    int n, i;
 
-    head1 = insertEnd(head1, 10);
-    head1 = insertEnd(head1, 20);
-    head1 = insertEnd(head1, 30);
+    printf("\n--- Insert elements in List 1 ---\n");
+    printf("How many nodes in List 1? ");
+    scanf("%d", &n);
+    for(i = 0; i < n; i++)
+        insertAtEnd(&head1); // we are passing an address because, inside method it will become local variable, we con't change the grobal variable so we need to use pointer to pointer
+                            // pointer to pointer because head is already a pointer . we are passing this pointer and modifying the value so need other pointers
 
-    head2 = insertEnd(head2, 40);
-    head2 = insertEnd(head2, 50);
+    printf("\n--- Insert elements in List 2 ---\n");
+    printf("How many nodes in List 2? ");
+    scanf("%d", &n);
+    for(i = 0; i < n; i++)
+        insertAtEnd(&head2);
 
-    printf("List 1: ");
-    display(head1);
+    printf("\nList 1: ");
+    display(head1); // here we are just passing the parameter, we are not modifying in the varaible inside the  method. 
 
     printf("List 2: ");
     display(head2);
 
-    // Concatenate now
-    head1 = concatenate(head1, head2);
+    concatenate();
 
-    printf("After Concatenation: ");
+    printf("\nAfter Concatenation (List1 + List2): ");
     display(head1);
 
     return 0;
