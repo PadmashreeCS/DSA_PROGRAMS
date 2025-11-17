@@ -80,15 +80,16 @@ int main()
 
     printf("\n--- Insert elements in List 1 ---\n");
     printf("How many nodes in List 1? ");
+    int n;
     scanf("%d", &n);
-    for(i = 0; i < n; i++)
+    for(int i = 0; i < n; i++)
         insertAtEnd(&head1); // we are passing an address because, inside method it will become local variable, we con't change the grobal variable so we need to use pointer to pointer
                             // pointer to pointer because head is already a pointer . we are passing this pointer and modifying the value so need other pointers
 
     printf("\n--- Insert elements in List 2 ---\n");
     printf("How many nodes in List 2? ");
     scanf("%d", &n);
-    for(i = 0; i < n; i++)
+    for(int i = 0; i < n; i++)
         insertAtEnd(&head2);
 
     printf("\nList 1: ");
