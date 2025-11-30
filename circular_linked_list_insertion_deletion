@@ -1,0 +1,260 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// Assuming the basic node structure as shown in the image
+struct node 
+{
+    int data;
+    struct node *next;
+};
+
+struct node *head = NULL; 
+struct node *tail = NULL; 
+
+void display()
+{
+    if (head == NULL)
+    {
+        printf("List is empty.\n");
+        return;
+    }
+    
+    struct node *temp = head;
+
+    printf("Circular List: ");
+    while(temp->next != head)
+    {
+        printf("%d ", temp->data);
+        temp = temp->next;
+    }
+    printf("%d ",temp->data);
+}
+
+
+void insertAtBeginning() 
+{
+    struct node *newnode = (struct node *)malloc(sizeof(struct node));
+    
+    if (newnode == NULL) 
+    {
+        printf("Memory allocation failed!\n");
+        return;
+    }
+
+    int data;
+    printf("Enter data for the new node: ");
+    scanf("%d", &data);
+    newnode->data = data;
+
+    if (tail == NULL) 
+    {
+        tail = newnode;
+        newnode->next = tail; 
+    } 
+    else 
+    {
+        newnode->next = tail->next; 
+        tail->next = newnode;
+    }
+    
+    printf("Node with data %d inserted at the beginning.\n", newnode->data);
+}
+
+void insertAtEnd() 
+{
+    struct node *newnode = (struct node *)malloc(sizeof(struct node));
+    
+    if (newnode == NULL) 
+    {
+        printf("Memory allocation failed!\n");
+        return;
+    }
+
+    int data;
+    printf("Enter data for the new node: ");
+    scanf("%d", &data);
+    newnode->data = data;
+
+    if (tail == NULL) 
+    {
+        tail = newnode;
+        newnode->next = tail; 
+    } 
+    else 
+    {
+        newnode->next = tail->next; 
+        tail->next = newnode;
+        tail=newnode;
+    }
+    
+    printf("Node with data %d inserted at the End.\n", newnode->data);
+}
+
+int getLength() 
+{
+    if (tail == NULL) 
+    {
+        return 0;
+    }
+    
+    int count = 1;
+    struct node *current = tail->next->next;
+    while (current != tail->next) 
+    {
+        count++;
+        current = current->next;
+    }
+    
+    return count;
+}
+
+void insertAtPos() 
+{
+    struct node *newnode, *temp;
+    int pos, i = 1, len;
+    int data;
+    printf("Enter position to insert (1-based index): ");
+    scanf("%d", &pos);
+
+    len = getLength();
+
+    if (pos < 1 || pos > len + 1) 
+    { 
+        printf("Invalid position. Position must be between 1 and %d.\n", len + 1);
+        return;
+    }
+    
+    else if (pos == 1) 
+    {
+        insertAtBeginning();
+    }
+    
+    else if (pos == len + 1)
+    {
+        insertAtEnd();
+    }
+
+    else 
+    {
+        newnode = (struct node *)malloc(sizeof(struct node));
+        if (newnode == NULL) 
+        {
+            printf("Memory allocation failed!\n");
+            return;
+        }
+        printf("Enter data for the new node: ");
+        scanf("%d", &data);
+        newnode->data = data;
+        temp = tail->next; 
+        while (i < pos - 1) 
+        {
+            temp = temp->next;
+            i++;
+        }
+        
+        newnode->next = temp->next;
+        temp->next = newnode;
+
+        printf("Node with data %d inserted at position %d.\n", newnode->data, pos);
+    }
+}
+
+void delFromBeg() 
+{
+    struct node *temp;
+    if (tail == NULL) 
+    { 
+        printf("List is empty. Cannot delete.\n");
+        return;
+    }
+    temp = tail->next; 
+    printf("Deleting node with data: %d\n", temp->data);
+    if (temp->next == temp) 
+    {
+        tail = NULL; 
+        free(temp);  
+    } 
+    else 
+    {
+        tail->next = temp->next; 
+        free(temp); 
+    }
+    
+    printf("Deletion from beginning successful.\n");
+}
+
+
+void delFromEnd()
+{
+    struct node *current, *previous;
+    if (tail == NULL) 
+    { 
+        printf("List is empty. Cannot delete.\n");
+        return;
+    }
+
+    current = tail->next; 
+    previous = NULL;      
+    
+    printf("Deleting node with data: %d\n", tail->data);
+    if (current->next == current) 
+    {
+        tail = NULL; 
+        free(current); 
+    } 
+
+    else 
+    {
+        while (current->next != tail->next) 
+        {
+            previous = current; 
+            current = current->next;
+        }
+        previous->next = tail->next; 
+        tail = previous; 
+        free(current);
+    }
+    
+    printf("Deletion from end successful.\n");
+}
+
+void delFromPos() 
+{
+    struct node *current, *nextnode;
+    int pos, i = 1, len;
+    printf("Enter position to delete (1-based index): ");
+    scanf("%d", &pos);
+
+    len = getLength(); 
+
+    if (pos < 1 || pos > len) 
+    { 
+        printf("Invalid position. Position must be between 1 and %d.\n", len);
+        return;
+    }
+    
+    else if (pos == 1)
+    {
+        delFromBeg();
+    }
+    
+    else 
+    {
+        current = tail->next;
+        while (i < pos - 1)
+        { 
+            current = current->next;
+            i++;
+        }
+        nextnode = current->next;
+        current->next = nextnode->next; 
+        
+        printf("Deleting node with data: %d\n", nextnode->data);
+        if (nextnode == tail)  // if(pos == len){ delFromEnd();}
+        {
+            tail = current; // if we are deleting last node change the tail to point to current
+        }
+        free(nextnode);
+    }
+}
+
