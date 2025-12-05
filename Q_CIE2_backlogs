@@ -1,0 +1,77 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+// Define the Node structure
+struct StudentNode {
+    int USN; // Simplified to integer
+    char name[50];
+    int backlogs;
+    struct StudentNode* next;
+};
+
+// Global pointer to the start of the list
+struct StudentNode* Start = NULL;
+
+// Function to read USN and update the total backlogs
+void updateBacklogs(int searchUSN, int newBacklogs) {
+    struct StudentNode* current = Start;
+    int found = 0;
+
+    while (current != NULL) {
+        if (current->USN == searchUSN) {
+            current->backlogs = newBacklogs;
+            printf("\n--- Update Successful ---\n");
+            printf("USN: %d, Name: %s, New Backlogs: %d\n", current->USN, current->name, current->backlogs);
+            printf("-------------------------\n");
+            found = 1;
+            break;
+        }
+        current = current->next;
+    }
+
+    if (!found) {
+        printf("\nError: Student with USN %d not found.\n", searchUSN);
+    }
+}
+
+// Function to delete students if backlogs > 4
+void deleteBackloggedStudents() {
+    struct StudentNode* current = Start;
+    struct StudentNode* prev = NULL;
+    struct StudentNode* temp = NULL;
+    int deletedCount = 0;
+
+    printf("\n--- Running Deletion Criteria (Backlogs > 4) ---\n");
+
+    // Loop through the list
+    while (current != NULL) {
+        if (current->backlogs > 4) {
+            // Case 1: Node to be deleted is the Start node
+            if (prev == NULL) {
+                Start = current->next; // Move Start to the next node
+                temp = current;
+                current = Start; // Current is now the new Start
+            } 
+            // Case 2: Node to be deleted is in the middle or end
+            else {
+                prev->next = current->next; // Skip the current node
+                temp = current;
+                current = current->next; // Move current forward
+            }
+            
+            printf("Deleted student: %s (USN: %d, Backlogs: %d)\n", temp->name, temp->USN, temp->backlogs);
+            free(temp); // Free the memory of the deleted node
+            deletedCount++;
+        } else {
+            // No deletion, move pointers normally
+            prev = current;
+            current = current->next;
+        }
+    }
+    
+    if (deletedCount == 0) {
+        printf("No students met the deletion criteria.\n");
+    }
+    printf("---------------------------------------------\n");
+}
