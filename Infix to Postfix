@@ -6,7 +6,7 @@
 #define SIZE 10
 
 char infix[SIZE];
-char postfix[SIZE];
+char postfix[SIZE];  // stack all of char type
 char stack[SIZE];
 int top = -1;
 int ch;
@@ -36,9 +36,9 @@ int main()
 {
    
     printf("Enter the prefix \n");
-    scanf("%s", infix);
+    scanf("%s", infix);  // don't put '&' for address and '%s' to accepte the char
     push('#');
-    while((ch=infix[i]) != '\0')
+    while((ch=infix[i]) != '\0')  // use () for assigning and then check for condition
     {
         ++i;
         if(ch == '(')
@@ -79,6 +79,6 @@ int main()
         ++k;
     }
     postfix[k]='\0';
-    printf("%s",postfix);
+    printf("%s",postfix); // print is of char '%s
     return 0;
 }
