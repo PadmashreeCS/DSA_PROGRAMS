@@ -1,0 +1,105 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct customerDetail
+{
+    char Name[50];
+    int age;
+    int ticket_no;
+    struct customerDetail *nextnode;
+};
+
+struct customerDetail *front = NULL;
+struct customerDetail *rear = NULL;
+
+int isEmpty()
+{
+    return front == NULL;
+}
+
+void enqueue()
+{
+    struct customerDetail *newnode = (struct customerDetail*)malloc(sizeof(struct customerDetail));
+    if (!newnode) { printf("Memory allocation failed\n"); return; }
+
+    printf("Enter the name: ");
+    scanf("%s", newnode->Name);
+    printf("Enter the age: ");
+    scanf("%d", &newnode->age);
+    printf("Enter the ticket no: ");
+    scanf("%d", &newnode->ticket_no);
+
+    if(isEmpty())
+    {
+        front = rear = newnode;
+        rear->nextnode = front; // circular link
+    }
+    else
+    {
+        rear->nextnode = newnode;
+        rear = newnode;
+        rear->nextnode = front; // maintain circular
+    }
+}
+
+void dequeue()
+{
+    if(isEmpty())
+    {
+        printf("No passengers to remove\n");
+        return;
+    }
+
+    struct customerDetail *temp = front;
+    printf("%s removed from waiting list\n", front->Name);
+
+    if(front == rear) // only one node
+    {
+        front = rear = NULL;
+    }
+    else
+    {
+        front = front->nextnode;
+        rear->nextnode = front; // maintain circular
+    }
+
+    free(temp);
+}
+
+void display()
+{
+    if(isEmpty())
+    {
+        printf("Waiting list is empty\n");
+        return;
+    }
+
+    struct customerDetail *temp = front;
+    printf("Waiting list: ");
+    do
+    {
+        printf("%s ", temp->Name);
+        temp = temp->nextnode;
+    } while(temp != front);
+    printf("\n");
+}
+
+int main()
+{
+    int choice;
+    while(1)
+    {
+        printf("1. Add Passenger 2. Remove Passenger 3. Display 4. Exit\n");
+        scanf("%d", &choice);
+
+        switch(choice)
+        {
+            case 1: enqueue(); break;
+            case 2: dequeue(); break;
+            case 3: display(); break;
+            case 4: exit(0); break;
+            default: printf("Invalid choice\n");
+        }
+    }
+    return 0;
+}
