@@ -53,17 +53,24 @@ void dequeue() {
     }
 }
 
-void display() {
-    if (isempty()) {
+void display()
+{
+    if (isempty())
+    {
         printf("Queue is empty\n");
-    } else {
-        printf("Queue elements: ");
+    }
+    else
+    {
         int i = front;
-        while (1) {
+        printf("Queue elements: ");
+
+        do
+        {
             printf("%d ", stack[i]);
-            if (i == rear) break;
             i = (i + 1) % SIZE;
         }
+        while (i != (rear + 1) % SIZE);
+
         printf("\n");
     }
 }
