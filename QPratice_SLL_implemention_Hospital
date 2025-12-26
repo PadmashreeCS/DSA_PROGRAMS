@@ -1,0 +1,104 @@
+// Online C compiler to run C program online
+#include <stdio.h>
+#include <stdlib.h>
+struct patient
+{
+    int patient_id;
+    char name[50];
+    char disease[50];
+    int ward_no;
+    struct patient *nextnode;
+};
+struct patient *head=NULL;
+struct patient* newnode;
+struct patient* temp;
+struct patient* previous;
+void insertion()
+{
+    newnode = (struct patient*)malloc(sizeof(struct patient));
+    printf("Patient id: ");
+    scanf("%d",&newnode->patient_id);
+    printf("Patient Name: ");
+    scanf("%s",newnode->name);
+    printf("Patient disease: ");
+    scanf("%s",newnode->disease);
+    printf("Patient ward_no: ");
+    scanf("%d",&newnode->ward_no);
+    newnode->nextnode = NULL;
+    if(head==NULL)
+    {
+        head=newnode;
+    }
+    else
+    {
+        temp = head;
+        while(temp->nextnode!=NULL)
+        {
+            temp=temp->nextnode;
+        }
+        temp->nextnode=newnode;
+    }
+}
+
+void deletion()
+{
+    if(head==NULL)
+    {
+        printf("List is empty: \n");
+    }
+    else
+    {
+        int id;
+        printf("Enter the patient id:\n");
+        scanf("%d",&id);
+        temp = head;
+        while((temp->patient_id != id) && (temp!=NULL))
+        {
+            previous = temp;
+            temp = temp->nextnode;
+        }
+        if(temp->patient_id == id)
+        {
+            printf("Id : %d Name : %s \n", temp->patient_id, temp->name);
+            previous->nextnode = temp->nextnode;
+            free(temp);
+        }
+        
+    }
+}
+
+void display()
+{
+    if(head==NULL)
+    {
+        printf("List is empty\n");
+    }
+    else
+    {
+        temp =head;
+        while(temp!=NULL)
+        {
+            printf("%d",temp->patient_id);
+            temp=temp->nextnode;
+        }
+    }
+}
+
+void main()
+{
+    int choice;
+    while(1)
+    {
+        printf("1. Enqueue 2. Dequeue 3. Display 4. exit\n");
+        scanf("%d",&choice);
+        switch(choice)
+        {
+            case 1:insertion(); break;
+            case 2: deletion(); break;
+            case 3: display(); break;
+            case 4: exit(0); break;
+            default:
+            printf("Invalid entry\n");
+        }
+    }
+}
