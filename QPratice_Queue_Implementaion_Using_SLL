@@ -1,0 +1,130 @@
+// Online C compiler to run C program online
+//Bank Service Counter
+//Design a program to manage customers waiting for service in a bank. 
+#include <stdio.h>
+#include <stdlib.h>
+#define MAX 10
+struct customerDetail
+{
+    int cust_id;
+    char Name[50];
+    char service_type[50];
+    struct customerDetail *nextnode;
+};
+struct customerDetail *newnode; 
+struct customerDetail *front; 
+struct customerDetail *rear; 
+struct customerDetail *temp; 
+struct customerDetail *temp_del;
+
+int rear_size=0;
+int front_size=0;
+
+int isEmpty()
+{
+    return front_size==0;
+}
+
+int isFull()
+{
+    return rear_size == MAX-1;
+}
+
+void enqueue()
+{
+    if(isFull())
+    {
+        printf("Queue is Overflow\n");
+    }
+    else
+    {
+        newnode = (struct customerDetail*)malloc(sizeof(struct customerDetail));
+        printf("Enter the cust ID: ");
+        scanf("%d",&newnode->cust_id);
+        printf("Enter the cust name: ");
+        scanf("%s",newnode->Name);
+        printf("Enter the service_type: ");
+        scanf("%s",newnode->service_type);
+        newnode->nextnode=NULL;
+        if(front_size == 0)
+        {
+            front= rear = newnode;
+            front_size=1;
+            rear_size=1;
+        }
+        else
+        {
+            temp=front;
+            while(temp->nextnode != NULL)
+            {
+                temp=temp->nextnode;
+            }
+            temp->nextnode=newnode;
+            rear=newnode;
+            ++rear_size;
+        }
+    }
+}
+
+void dequeue()
+{
+    if(front_size==0)
+    {
+        printf("Queue is Underflow\n");
+    }
+    else
+    {
+        if(front_size==rear_size)
+        {
+            printf("%d cutomer service: \n",front->cust_id);
+            front = rear = NULL;
+            front_size = rear_size = 0;
+        }
+        else
+        {
+            temp_del = front;
+            printf("%d cutomer service: \n",front->cust_id);
+            front=front->nextnode;
+            ++front_size;
+            free(temp_del);
+        }
+    }
+}
+
+void display()
+{
+    if(isEmpty())
+    {
+        printf("Queue is Underflow \n");
+    }
+    else
+    {
+        temp = front;
+        while(temp!=NULL)
+        {
+            printf("%d",temp->cust_id);
+            temp=temp->nextnode;
+        }
+    }
+}
+
+
+
+void main()
+{
+    int choice;
+    while(1)
+    {
+        printf("1. Enqueue 2. Dequeue 3. Display 4. exit\n");
+        scanf("%d",&choice);
+        switch(choice)
+        {
+            case 1:enqueue(); break;
+            case 2: dequeue(); break;
+            case 3: display(); break;
+            case 4: exit(0); break;
+            default:
+            printf("Invalid entry\n");
+        }
+    }
+}
