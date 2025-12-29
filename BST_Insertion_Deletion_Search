@@ -1,0 +1,143 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// BST Node
+struct node
+{
+    int data;
+    struct node *left;
+    struct node *right;
+};
+
+// Create new node
+struct node* createNode(int value)
+{
+    struct node* newNode = (struct node*)malloc(sizeof(struct node));
+    newNode->data = value;
+    newNode->left = NULL;
+    newNode->right = NULL;
+    return newNode;
+}
+
+// Insert node (no duplicates)
+struct node* insert(struct node* root, int value)
+{
+    if (root == NULL)
+        return createNode(value);
+
+    if (value < root->data)
+        root->left = insert(root->left, value);
+    else if (value > root->data)
+        root->right = insert(root->right, value);
+    else
+        printf("Duplicate value not allowed!\n");
+
+    return root;
+}
+
+// Find minimum value node (Inorder Successor)
+struct node* findMin(struct node* root)
+{
+    while (root->left != NULL)
+        root = root->left;
+
+    return root;
+}
+
+// Delete a node in BST
+struct node* deleteNode(struct node* root, int key)
+{
+    if (root == NULL)
+        return root;
+
+    // Search node
+    if (key < root->data)
+    {
+        root->left = deleteNode(root->left, key);
+    }
+    else if (key > root->data)
+    {
+        root->right = deleteNode(root->right, key);
+    }
+    else
+    {
+        // Case 1 & 2: 0 or 1 child
+        if (root->left == NULL)
+        {
+            struct node* temp = root->right;
+            free(root);
+            return temp;
+        }
+        else if (root->right == NULL)
+        {
+            struct node* temp = root->left;
+            free(root);
+            return temp;
+        }
+
+        // Case 3: 2 children
+        struct node* temp = findMin(root->right); // inorder successor
+        root->data = temp->data;
+        root->right = deleteNode(root->right, temp->data);
+    }
+    return root;
+}
+
+// Inorder traversal
+void inorder(struct node* root)
+{
+    if (root != NULL)
+    {
+        inorder(root->left);
+        printf("%d ", root->data);
+        inorder(root->right);
+    }
+}
+
+int main()
+{
+    struct node* root = NULL;
+    int choice, value;
+
+    do
+    {
+        printf("\n--- Binary Search Tree ---\n");
+        printf("1. Insert\n");
+        printf("2. Delete\n");
+        printf("3. Display (Inorder)\n");
+        printf("4. Exit\n");
+        printf("Enter choice: ");
+        scanf("%d", &choice);
+
+        switch (choice)
+        {
+            case 1:
+                printf("Enter value to insert: ");
+                scanf("%d", &value);
+                root = insert(root, value);
+                break;
+
+            case 2:
+                printf("Enter value to delete: ");
+                scanf("%d", &value);
+                root = deleteNode(root, value);
+                break;
+
+            case 3:
+                printf("BST elements: ");
+                inorder(root);
+                printf("\n");
+                break;
+
+            case 4:
+                printf("Exiting...\n");
+                break;
+
+            default:
+                printf("Invalid choice!\n");
+        }
+    }
+    while (choice != 4);
+
+    return 0;
+}
