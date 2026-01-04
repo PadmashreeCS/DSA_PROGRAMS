@@ -1,0 +1,50 @@
+#include <stdio.h>
+
+#define EMPTY -1
+
+int main()
+{
+    int ht[100], n, m, key, index;
+
+    printf("Enter number of employee records: ");
+    scanf("%d", &n);
+
+    printf("Enter size of hash table (m): ");
+    scanf("%d", &m);
+
+    for (int i = 0; i < m; i++)
+        ht[i] = EMPTY;
+
+    for (int i = 0; i < n; i++)
+    {
+        printf("Enter 4-digit employee key: ");
+        scanf("%d", &key);
+
+        int h = key % m;
+        int j = 0;
+
+        while (j < m)
+        {
+            index = (h + j * j) % m;
+
+            if (ht[index] == EMPTY)
+            {
+                ht[index] = key;
+                break;
+            }
+            j++;
+        }
+    }
+
+    printf("\nHash Table (Quadratic Probing):\n");
+    printf("Address\tKey\n");
+    for (int i = 0; i < m; i++)
+    {
+        if (ht[i] == EMPTY)
+            printf("%d\t--\n", i);
+        else
+            printf("%d\t%d\n", i, ht[i]);
+    }
+
+    return 0;
+}
