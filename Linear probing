@@ -1,0 +1,49 @@
+#include <stdio.h>
+
+#define EMPTY -1
+
+int main()
+{
+    int ht[100], n, m, key, index;
+
+    // Input number of records and hash table size
+    printf("Enter number of employee records: ");
+    scanf("%d", &n);
+
+    printf("Enter size of hash table (m): ");
+    scanf("%d", &m);
+
+    // Initialize hash table
+    for (int i = 0; i < m; i++)
+        ht[i] = EMPTY;
+
+    // Insert keys
+    for (int i = 0; i < n; i++)
+    {
+        printf("Enter 4-digit employee key: ");
+        scanf("%d", &key);
+
+        index = key % m;
+
+        // Linear probing for collision resolution
+        while (ht[index] != EMPTY)
+        {
+            index = (index + 1) % m;
+        }
+
+        ht[index] = key;
+    }
+
+    // Display hash table
+    printf("\nHash Table:\n");
+    printf("Address\tKey\n");
+    for (int i = 0; i < m; i++)
+    {
+        if (ht[i] == EMPTY)
+            printf("%d\t--\n", i);
+        else
+            printf("%d\t%d\n", i, ht[i]);
+    }
+
+    return 0;
+}
