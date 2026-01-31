@@ -16,7 +16,7 @@ struct node *newnode, *temp, *prevnode;
 void insertAtEnd(char n[], float v)
 {
     newnode = (struct node*)malloc(sizeof(struct node));
-    strcpy(newnode->name, n);
+    strcpy(newnode->name, n);   // for inserting the string use strcpy
     newnode->version = v;
     newnode->next = NULL;
 
