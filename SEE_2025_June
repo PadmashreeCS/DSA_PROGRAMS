@@ -1,0 +1,119 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+struct node
+{
+    char name[20];
+    float version;
+    struct node *next;
+};
+
+struct node *head = NULL;
+struct node *newnode, *temp, *prevnode;
+
+/* Insert at End */
+void insertAtEnd(char n[], float v)
+{
+    newnode = (struct node*)malloc(sizeof(struct node));
+    strcpy(newnode->name, n);
+    newnode->version = v;
+    newnode->next = NULL;
+
+    if (head == NULL)
+        head = newnode;
+    else
+    {
+        temp = head;
+        while (temp->next != NULL)
+            temp = temp->next;
+        temp->next = newnode;
+    }
+}
+
+/* Insert at Given Position */
+void insertAtPosition(char n[], float v, int pos)
+{
+    int i = 1;
+    newnode = (struct node*)malloc(sizeof(struct node));
+    strcpy(newnode->name, n);
+    newnode->version = v;
+
+    temp = head;
+    while (i < pos - 1)
+    {
+        temp = temp->next;
+        i++;
+    }
+
+    newnode->next = temp->next;
+    temp->next = newnode;
+}
+
+/* Update Version using Name (IMPORTANT) */
+void updateVersion(char n[], float newVersion)
+{
+    temp = head;
+    while (temp != NULL)
+    {
+        if (strcmp(temp->name, n) == 0)
+        {
+            temp->version = newVersion;
+            return;
+        }
+        temp = temp->next;
+    }
+}
+
+/* Delete from End */
+void deleteFromEnd()
+{
+    temp = head;
+    prevnode = NULL;
+
+    while (temp->next != NULL)
+    {
+        prevnode = temp;
+        temp = temp->next;
+    }
+
+    prevnode->next = NULL;
+    free(temp);
+}
+
+/* Display List */
+void display()
+{
+    temp = head;
+    while (temp != NULL)
+    {
+        printf("%s %.1f -> ", temp->name, temp->version);
+        temp = temp->next;
+    }
+    printf("NULL\n");
+}
+
+int main()
+{
+    /* Initial List */
+    insertAtEnd("Android", 2.0);
+    insertAtEnd("Kitkat", 4.0);
+
+    printf("Initial List:\n");
+    display();
+
+    /* Operation 1 */
+    insertAtPosition("Honeycomb", 3.0, 2);
+    updateVersion("Kitkat", 4.4);
+
+    printf("\nAfter Operation 1:\n");
+    display();
+
+    /* Operation 2 */
+    deleteFromEnd();
+
+    printf("\nAfter Operation 2:\n");
+    display();
+
+    return 0;
+}
