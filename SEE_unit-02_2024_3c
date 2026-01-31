@@ -1,0 +1,94 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+/* Structure of a node */
+struct Node
+{
+    int id;                  // Team member ID
+    struct Node *next;
+};
+
+struct Node *head = NULL;
+
+/* Add a team member */
+void addMember(int id)
+{
+    struct Node *newNode = (struct Node *)malloc(sizeof(struct Node));
+    newNode->id = id;
+    newNode->next = head;
+    head = newNode;
+    printf("Member %d joined the team\n", id);
+}
+
+/* Remove a team member */
+void removeMember(int id)
+{
+    struct Node *temp = head, *prev = NULL;
+
+    if (temp != NULL && temp->id == id)
+    {
+        head = temp->next;
+        free(temp);
+        printf("Member %d left the team\n", id);
+        return;
+    }
+
+    while (temp != NULL && temp->id != id)
+    {
+        prev = temp;
+        temp = temp->next;
+    }
+
+    if (temp == NULL)
+    {
+        printf("Member %d not found\n", id);
+        return;
+    }
+
+    prev->next = temp->next;
+    free(temp);
+    printf("Member %d left the team\n", id);
+}
+
+/* Count team members */
+int countMembers()
+{
+    int count = 0;
+    struct Node *temp = head;
+    while (temp != NULL)
+    {
+        count++;
+        temp = temp->next;
+    }
+    return count;
+}
+
+/* Display team members */
+void displayTeam()
+{
+    struct Node *temp = head;
+    printf("Team Members: ");
+    while (temp != NULL)
+    {
+        printf("%d -> ", temp->id);
+        temp = temp->next;
+    }
+    printf("NULL\n");
+}
+
+int main()
+{
+    addMember(101);
+    addMember(102);
+    addMember(103);
+
+    displayTeam();
+    printf("Total members: %d\n", countMembers());
+
+    removeMember(102);
+
+    displayTeam();
+    printf("Total members: %d\n", countMembers());
+
+    return 0;
+}
