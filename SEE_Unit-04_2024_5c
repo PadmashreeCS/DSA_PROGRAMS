@@ -1,0 +1,59 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+struct Book {
+    int id;
+    char title[50];
+    char author[50];
+    int year;
+    struct Book *left, *right;
+};
+
+// Create new book node
+struct Book* createBook(int id, char title[], char author[], int year) {
+    struct Book* newBook = (struct Book*)malloc(sizeof(struct Book));
+    newBook->id = id;
+    strcpy(newBook->title, title);
+    strcpy(newBook->author, author);
+    newBook->year = year;
+    newBook->left = newBook->right = NULL;
+    return newBook;
+}
+
+// Insert book into BST
+struct Book* insert(struct Book* root, int id, char title[], char author[], int year) {
+    if (root == NULL)
+        return createBook(id, title, author, year);
+
+    if (id < root->id)
+        root->left = insert(root->left, id, title, author, year);
+    else if (id > root->id)
+        root->right = insert(root->right, id, title, author, year);
+
+    return root;
+}
+
+// Preorder Traversal
+void preorder(struct Book* root) {
+    if (root != NULL) {
+        printf("ID: %d, Title: %s, Author: %s, Year: %d\n",
+               root->id, root->title, root->author, root->year);
+        preorder(root->left);
+        preorder(root->right);
+    }
+}
+
+int main() {
+    struct Book* root = NULL;
+
+    root = insert(root, 50, "C Programming", "Dennis Ritchie", 1978);
+    root = insert(root, 30, "Data Structures", "Seymour Lipschutz", 1990);
+    root = insert(root, 70, "Algorithms", "Robert Sedgewick", 1983);
+    root = insert(root, 20, "DBMS", "Elmasri", 2004);
+
+    printf("Preorder Traversal of Library Catalog:\n");
+    preorder(root);
+
+    return 0;
+}
